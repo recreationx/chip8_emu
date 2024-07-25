@@ -5,7 +5,7 @@ def main():
     # set input
 
     chip8_cpu = CPU()
-    chip8_cpu.load_game("test_opcode.ch8")
+    chip8_cpu.load_game("IBM Logo.ch8")
 
     while True:
         chip8_cpu.cycle()

@@ -119,12 +119,13 @@ class CPU:
 
     def execute_instruction(self):
         operation = (self.opcode & 0xF000) >> 12
+        logger.info("OPCODE LOGGED: " + hex(self.opcode))
         self.pc += 2
         if operation in self.operations_table:
             self.operations_table[operation]()
             logger.info("Running opcode: " + hex(self.opcode))
         else:
-            print(f"Operation {operation} does not exist.")
+            logger.info(f"Operation {operation} does not exist.")
     
     def execute_zero(self):
         """
@@ -217,7 +218,7 @@ class CPU:
     def add_register_value(self):
         Vx = (self.opcode & 0x0F00) >> 8
         kk = self.opcode & 0x00FF
-        self.registers[Vx] += kk
+        self.registers[Vx] += kk 
 
     def execute_logic_operations(self):
         operation = self.opcode & 0x000F
@@ -308,7 +309,6 @@ class CPU:
         The value of register I is set to nnn.
         """
         self.I = self.opcode & 0x0FFF
-        self.pc += 2
     
     def jump_to_addr_plus_v0(self):
         """
@@ -344,9 +344,9 @@ class CPU:
             sprite = self.memory[self.I + yline]
             for xline in range(8):
                 if sprite & (0x80 >> xline):
-                    if self.gfx[(Vy + yline) * 64 + (Vx + xline)] == 1:
+                    if self.gfx[(self.registers[Vy] + yline) * 64 + (self.registers[Vx]+ xline)] == 1:
                         self.registers[0xF] = 1
-                    self.gfx[(Vy + yline) * 64 + (Vx + xline)] ^= 1
+                    self.gfx[(self.registers[Vy] + yline) * 64 + (self.registers[Vx] + xline)] ^= 1
         self.drawFlag = True
 
     def set_vx_to_delay_timer(self):
