@@ -5,13 +5,13 @@ def main():
     # set input
 
     chip8_cpu = CPU()
-    chip8_cpu.load_game("IBM Logo.ch8")
-
+    # chip8_cpu.load_game("tests/1-chip8-logo.ch8")
+    chip8_cpu.load_game("tests/3-corax+.ch8")
     while True:
         chip8_cpu.cycle()
 
         if chip8_cpu.drawFlag:
-            on_pixel = '#'
+            on_pixel = '█'
             off_pixel = ' '
             for y in range(32):
                 line = ''

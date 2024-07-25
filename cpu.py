@@ -218,7 +218,7 @@ class CPU:
     def add_register_value(self):
         Vx = (self.opcode & 0x0F00) >> 8
         kk = self.opcode & 0x00FF
-        self.registers[Vx] += kk 
+        self.registers[Vx] = (self.registers[Vx] + kk) & 0xFF
 
     def execute_logic_operations(self):
         operation = self.opcode & 0x000F
@@ -259,7 +259,7 @@ class CPU:
             self.registers[0xF] = 1
         else:
             self.registers[0xF] = 0
-        self.registers[Vx] += self.registers[Vy] 
+        self.registers[Vx] = (self.registers[Vx] + self.registers[Vy]) & 0xFF
 
     def sub_registers(self):
         Vx = (self.opcode & 0x0F00) >> 8
@@ -268,12 +268,12 @@ class CPU:
             self.registers[0xF] = 1
         else:
             self.registers[0xF] = 0
-        self.registers[Vx] -= self.registers[Vy]
+        self.registers[Vx] = (self.registers[Vx] - self.registers[Vy]) & 0xFF
 
     def shift_right(self):  
         Vx = (self.opcode & 0x0F00) >> 8
         self.registers[0xF] = self.registers[Vx] & 0x1
-        self.registers[Vx] >>= 1
+        self.registers[Vx] = (self.registers[Vx] >> 1) & 0xFF
     
 
     def subn_registers(self):
@@ -283,12 +283,12 @@ class CPU:
             self.registers[0xF] = 0
         else:
             self.registers[0xF] = 1
-        self.registers[Vx] = self.registers[Vy] - self.registers[Vx]
+        self.registers[Vx] = (self.registers[Vx] - self.registers[Vy]) & 0xFF
 
     def shift_left(self):
         Vx = (self.opcode & 0x0F00) >> 8
         self.registers[0xF] = (self.registers[Vx] & 0x80) >> 7
-        self.registers[Vx] <<= 1
+        self.registers[Vx] = (self.registers[Vx] << 1) & 0xFF
 
     def skip_if_registers_neq(self):
         """
